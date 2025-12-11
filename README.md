@@ -179,7 +179,7 @@ This message is shown once a day. To disable it please create the
 
 ### 5-2. Dockerのインストール（所要時間：約5分）
 
-testユーザーの直下に軽量監視のためのmonitoringフォルダを作成します。
+testユーザーの直下に軽量監視のための`monitoring`フォルダを作成します。
 
 ```bash
 # monitoringフォルダを作成し、移動
@@ -249,14 +249,15 @@ docker run hello-world
 ```
 
 DockerComposeの設定ファイルを作成する。
-docker-compose.ymlという名前でファイルを新規作成し、編集する。
+`docker-compose.yml`という名前でファイルを新規作成し、編集する。
 
 ```bash
 # vimで作成し、編集
 vim ~/monitoring/docker-compose.yml
 ```
 
-以下のコードをコピーして貼り付けてください：
+vim起動後、以下のコードをコピーし、ペーストした後に`Escキー`でコマンドモードに移動します。
+コマンドモードで`:wq`と入力し、Enterを押下することで保存して終了することができます。
 
 ```yaml
 services:
@@ -295,14 +296,14 @@ volumes:
   grafana-data:
 ```
 
-同様にして、Prometheusの設定ファイルも作成し、編集する。
+同様にして、Prometheusの設定ファイルも作成し、編集します。
 
 ```bash
 # vimで作成し、編集
 vim ~/monitoring/prometheus.yml
 ```
 
-以下のコードをコピーして貼り付けてください：
+以下のコードをコピーして貼り付けて、コマンドモードで`:wq`と入力後、Enterを押下して保存します。
 
 ```yaml
 global:
@@ -330,7 +331,7 @@ ls -la ~/monitoring/
 
 ### 6-2. サービスの起動（所要時間：約2分）
 
-systemctlコマンドを利用して、dockerを起動します。
+`systemctl`コマンドを利用して、dockerを起動します。
 statusを確認し、serviceがenable、Activeがactive(running)になっていれば設定はOKです。
 
 ```bash
@@ -351,31 +352,8 @@ sudo systemctl status docker
   </div>
 </figure>
 
-ここで、systemctlが使用できない等のエラーが発生した場合は、次のコマンドでWSLの設定を確認してください。
 
-```bash
-# nanoでwslの設定ファイルを確認、Ctrl+X の後にEnterで閉じられます
-sudo nano /etc/wsl.conf 
-
-# ファイル内容
-[boot]
-systemd=true  # trueかどうかを確認
-
-[user]
-default=test  # testでなくても特に問題はない
-
-# 設定を変更した場合、WSLの再起動を行うこと
-wsl --shutdown
-```
-
-<figure>
-  <img src="images/7.png" alt="wsl.confの内容">
-  <div style="text-align: center;">
-    <figcaption>wsl.confの内容</figcaption>
-  </div>
-</figure>
-
-アプリを作成した設定ファイルに従って起動します。
+`systemctl`コマンドでdockerを起動することができたら、アプリを作成した設定ファイルに従って起動します。
 
 ```bash
 # docker-compose.ymlを読み込み、サービスを起動
@@ -425,7 +403,7 @@ Grafana（http://localhost:3000）にアクセスし、ユーザーネームと�
 
 ## 7. 動作確認と検証
 
-### 6-1. 全サービスの起動確認
+### 7-1. 全サービスの起動確認
 
 Dockerの状態を確認します。
 node-exporter、prometheus、grafana のStatusがUpであることを確認してください。
@@ -442,7 +420,7 @@ docker ps
   </div>
 </figure>
 
-### 6-2. Prometheus Web UI での確認
+### 7-2. Prometheus Web UI での確認
 
 ブラウザで以下のURLにアクセスします：
 
@@ -461,7 +439,7 @@ http://localhost:9090/targets
   </div>
 </figure>
 
-### 6-3. Grafanaダッシュボード確認
+### 7-3. Grafanaダッシュボード確認
 
 ブラウザで以下のURLにアクセスします：
 
@@ -497,7 +475,35 @@ Absolute time rangeの項目をサービス起動からの時間に合わせて�
 
 ## 8. トラブルシューティング
 
-### Q1: `docker ps` でコンテナが表示されない、または Status が Exited
+### Q1: `systemctl`コマンドが使用できない
+`systemctl`が使用できない等のエラーが発生した場合は、WSLインストール時に作成されたユーザーで、以下のコマンドを実行し、WSLの設定を確認してください。
+`systemed`の中身を確認し、`false`になっている場合は、`true`に変更して保存してください。
+nanoでは、`ctrl+o`を押下し、`Enter`で保存できます。
+`ctrl+x`で閉じることができます。 
+
+```bash
+# nanoでwslの設定ファイルを確認、
+sudo nano /etc/wsl.conf 
+
+# ファイル内容
+[boot]
+systemd=true  # trueかどうかを確認
+
+[user]
+default=test  # testでなくても特に問題はない
+
+# 設定を変更した場合、WSLの再起動を行うこと
+wsl --shutdown
+```
+
+<figure>
+  <img src="images/7.png" alt="wsl.confの内容">
+  <div style="text-align: center;">
+    <figcaption>wsl.confの内容</figcaption>
+  </div>
+</figure>
+
+### Q2: `docker ps` でコンテナが表示されない、または Status が Exited
 
 **原因**：サービスが起動に失敗しているか、クラッシュしている
 
@@ -514,7 +520,7 @@ docker logs prometheus
 # → prometheus.yml が正しい場所にあるか確認
 ```
 
-### Q2: Prometheus Web UI でノードのステータスが DOWN
+### Q3: Prometheus Web UI でノードのステータスが DOWN
 
 **原因**：ノードエクスポーターが起動していない
 
@@ -524,7 +530,7 @@ docker logs prometheus
 docker logs node-exporter
 ```
 
-### Q3: Grafana ダッシュボードで「No data」と表示される
+### Q4: Grafana ダッシュボードで「No data」と表示される
 
 **原因**：データソースの設定が不正、またはメトリクス収集がまだ始まっていない
 
@@ -541,7 +547,7 @@ docker logs node-exporter
 
 ## 9. セキュリティ考慮
 
-### 8-1. Grafana デフォルトパスワードの変更
+### 9-1. Grafana デフォルトパスワードの変更
 
 初回ログイン時に必ずパスワードを変更してください。
 
