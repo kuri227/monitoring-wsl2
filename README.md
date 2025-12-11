@@ -455,7 +455,7 @@ http://localhost:3000
 
 ダッシュボード確認手順：
 1. メニュー → **Dashboards**
-2. 「**Node Exporter for Full**」を開く
+2. 「**Node Exporter Full**」を開く
 3. 以下のパネルに数値が表示されていることを確認：
    - CPU Busy（%）
 
