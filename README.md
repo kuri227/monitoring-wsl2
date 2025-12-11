@@ -1,4 +1,4 @@
-# ～軽量監視システムの導入～
+# 軽量監視システムの導入
 
 ## 目次
 1. [はじめに](#1-はじめに)
@@ -88,8 +88,10 @@ wsl --install Ubuntu-24.04
 ```
 
 <figure>
-  <img src="images/1.png">
-  <figcaption align="center">コマンド実行結果</figcaption>
+  <img src="images/1.png" alt="Ubuntu-24.04インストール画面">
+  <div style="text-align: center;">
+    <figcaption>コマンド実行結果</figcaption>
+  </div>
 </figure>
 
 初期ユーザー名はお使いのWindowsのユーザー名が入力されています。パスワードを設定する必要があります。
@@ -102,8 +104,10 @@ cat /etc/os-release
 ```
 
 <figure>
-  <img src="images/2.png">
-  <figcaption align="center">os-release確認結果</figcaption>
+  <img src="images/2.png" alt="os-release確認結果">
+  <div style="text-align: center;">
+    <figcaption>os-release確認結果</figcaption>
+  </div>
 </figure>
 
 次回以降は以下のコマンドでUbuntu-24.04を起動することができます。
@@ -121,7 +125,6 @@ sudoコマンドを使用するために、先ほど設定したパスワード�
 Full Name などの情報は特に入力したいものがなければ、何もせずEnterで大丈夫です。
 
 ```bash
-
 # ユーザーを新規作成
 sudo adduser test
 
@@ -149,8 +152,10 @@ info: Adding user `test' to group `users' ...
 ```
 
 <figure>
-  <img src="images/3.png">
-  <figcaption align="center">adduser実行結果</figcaption>
+  <img src="images/3.png" alt="adduser実行結果">
+  <div style="text-align: center;">
+    <figcaption>adduser実行結果</figcaption>
+  </div>
 </figure>
 
 
@@ -190,8 +195,10 @@ This message is shown once a day. To disable it please create the
 ```
 
 <figure>
-  <img align="center" src="images/4.png">
-  <figcaption align="center">su - test 実行結果</figcaption>
+  <img src="images/4.png" alt="su - test 実行結果">
+  <div style="text-align: center;">
+    <figcaption>su - test 実行結果</figcaption>
+  </div>
 </figure>
 
 ### 5-2. Dockerのインストール（所要時間：約5分）
@@ -248,8 +255,10 @@ docker run hello-world
 ```
 
 <figure>
-  <img src="images/5.png">
-  <figcaption align="center">docker run 実行結果</figcaption>
+  <img src="images/5.png" alt="docker run 実行結果">
+  <div style="text-align: center;">
+    <figcaption>docker run 実行結果</figcaption>
+  </div>
 </figure>
 
 ### 5-3. 設定ファイルの準備と所有権設定（所要時間：約5分）
@@ -269,9 +278,9 @@ docker-compose.ymlという名前でファイルを新規作成し、編集す�
 vim ~/monitoring/docker-compose.yml
 ```
 
-以下のコードをコピーして貼り付け
+以下のコードをコピーして貼り付けてください：
 
-```bash
+```yaml
 services:
   prometheus:
     image: prom/prometheus:latest
@@ -308,14 +317,16 @@ volumes:
   grafana-data:
 ```
 
-同様にして、premetheusの設定ファイルも作成し、編集する。
+同様にして、Prometheusの設定ファイルも作成し、編集する。
+
 ```bash
 # vimで作成し、編集
 vim ~/monitoring/prometheus.yml
 ```
 
-以下のコードをコピーして貼り付け
-```bash
+以下のコードをコピーして貼り付けてください：
+
+```yaml
 global:
   scrape_interval: 5s
 
@@ -328,17 +339,22 @@ scrape_configs:
     static_configs:
       - targets: ['node-exporter:9100']
 ```
-設定ファイルの所有権と権限を明記します。
+
+設定ファイルの所有権と権限を確認します。
+
 ```bash
 # ファイルの所有権と権限を確認・設定
 ls -la ~/monitoring/
 # 出力例：
-#-rw-rw-r-- 1 test docker  616 Dec 11 00:45 docker-compose.yml
-#-rw-rw-r-- 1 test docker  222 Dec 11 00:56 prometheus.yml
+# -rw-r--r-- 1 test docker  616 Dec 11 00:45 docker-compose.yml
+# -rw-r--r-- 1 test docker  222 Dec 11 00:56 prometheus.yml
 ```
+
 ### 5-4. サービスの起動（所要時間：約2分）
+
 systemctlコマンドを利用して、dockerを起動します。
-statusを確認し、surviceがenable, Activeがactive(running)になっていれば設定はOKです。
+statusを確認し、serviceがenable、Activeがactive(running)になっていれば設定はOKです。
+
 ```bash
 # dockerを起動する
 sudo systemctl start docker
@@ -349,15 +365,18 @@ sudo systemctl enable docker
 # dockerの状態を確認
 sudo systemctl status docker
 ```
+
 <figure>
-  <img src="images/6.png">
-  <figcaption align="center">コマンド実行結果</figcaption>
+  <img src="images/6.png" alt="Docker起動状態確認">
+  <div style="text-align: center;">
+    <figcaption>コマンド実行結果</figcaption>
+  </div>
 </figure>
 
 ここで、systemctlが使用できない等のエラーが発生した場合は、次のコマンドでWSLの設定を確認してください。
 
 ```bash
-# nanoでwslの設定ファイルを確認、ctrl+xの後にEnterで閉じられます
+# nanoでwslの設定ファイルを確認、Ctrl+X の後にEnterで閉じられます
 sudo nano /etc/wsl.conf 
 
 # ファイル内容
@@ -370,9 +389,12 @@ default=test  # testでなくても特に問題はない
 # 設定を変更した場合、WSLの再起動を行うこと
 wsl --shutdown
 ```
+
 <figure>
-  <img src="images/7.png">
-  <figcaption align="center">wsl.confの内容</figcaption>
+  <img src="images/7.png" alt="wsl.confの内容">
+  <div style="text-align: center;">
+    <figcaption>wsl.confの内容</figcaption>
+  </div>
 </figure>
 
 アプリを作成した設定ファイルに従って起動します。
@@ -383,37 +405,43 @@ docker-compose up -d
 ```
 
 <figure>
-  <img src="images/8.png">
-  <figcaption align="center">compose up 実行結果</figcaption>
+  <img src="images/8.png" alt="Docker Compose起動結果">
+  <div style="text-align: center;">
+    <figcaption>compose up 実行結果</figcaption>
+  </div>
 </figure>
 
 
 ### 5-5. Grafanaの初期設定（所要時間：約5分）
 
-Grafana(http://localhost:3000)にアクセスし、ユーザーネームとパスワードのどちらもadminと入力する。
-新しいパスワードの設定を求められるので、入力。
-次のような画面に遷移する。
+Grafana（http://localhost:3000）にアクセスし、ユーザーネームとパスワードのどちらも`admin`と入力します。
+新しいパスワードの設定を求められるので、入力してください。
 
 <figure>
-  <img src="images/10.png">
-  <figcaption align="center">Grafanaの初期画面</figucaption>
+  <img src="images/10.png" alt="Grafanaの初期画面">
+  <div style="text-align: center;">
+    <figcaption>Grafanaの初期画面</figcaption>
+  </div>
 </figure>
 
-左端のメニューバーのConnectionsをクリックし、add new connectionをクリック。
-検索欄に、prometheusと入力して、出てきたものをクリック。
-右上のadd new data sourceをクリックして、Connectionの入力欄に「http://prometheus:9090」を入力。
+左側のメニューから **Connections** をクリックし、**Add new connection** をクリックします。
+検索欄に `prometheus` と入力して、出現した項目をクリックします。
+右上の **Add new data source** をクリックして、URL入力欄に `http://prometheus:9090` を入力します。
 
 <figure>
-  <img src="images/11.png">
-  <figcaption align="center">Connectionにリンクを入力</figcaption>
+  <img src="images/11.png" alt="Prometheus接続設定">
+  <div style="text-align: center;">
+    <figcaption>Connectionにリンクを入力</figcaption>
+  </div>
 </figure>
 
-下までスクロールして、 Save & test をクリック。
-Successfully queried the Prometheus API. と出力されればOK。
+下までスクロールして、**Save & test** をクリックします。
+「Successfully queried the Prometheus API.」と表示されればOKです。
 
 
-Dashboardsタブを開いて、右上のnewをクリックし、開いたプルダウンからimportをクリック。
-Find and import dashboards ~~ の入力欄に1860と入力して、右のLoadをクリック。初期設定のまま、importをクリック。
+**Dashboards** タブを開いて、右上の **New** をクリックし、プルダウンから **Import** をクリックします。
+「Find and import dashboards from grafana.com」の入力欄に `1860` と入力して、**Load** をクリックします。
+初期設定のまま **Import** をクリックします。
 
 これで軽量監視の環境の構築は完了です。
 
@@ -422,58 +450,71 @@ Find and import dashboards ~~ の入力欄に1860と入力して、右のLoadを
 ### 6-1. 全サービスの起動確認
 
 Dockerの状態を確認します。
-node-exporter, prometheus, grafanaのstatusがUpであることを確認してください。
+node-exporter、prometheus、grafana のStatusがUpであることを確認してください。
 
 ```bash
 # 動いているサービスを確認
 docker ps
 ```
+
 <figure>
-  <img src="images/9.png">
-  <figcaption align="center">docker ps の実行結果</figcaption>
+  <img src="images/9.png" alt="docker ps実行結果">
+  <div style="text-align: center;">
+    <figcaption>docker ps の実行結果</figcaption>
+  </div>
 </figure>
 
 ### 6-2. Prometheus Web UI での確認
 
-```bash
-# ブラウザで以下にアクセス
-# http://localhost:9090/targets
+ブラウザで以下のURLにアクセスします：
 
-# 確認項目：
-# prometheus     →  State: UP
-# node_exporter  →  State: UP
 ```
+http://localhost:9090/targets
+```
+
+確認項目：
+- prometheus → State: **UP**
+- node_exporter → State: **UP**
+
 <figure>
-  <img src="images/prometheus.png">
-  <figcaption align="center">prometheusの画面
-  </figcaption>
+  <img src="images/prometheus.png" alt="Prometheus Targets画面">
+  <div style="text-align: center;">
+    <figcaption>prometheusの画面</figcaption>
+  </div>
 </figure>
 
 ### 6-3. Grafanaダッシュボード確認
-```bash
-# ブラウザで以下にアクセス
-# http://localhost:3000
 
-# 初期ログイン情報
-# Username: admin
-# Password: admin（初回ログイン時に変更を促される）
+ブラウザで以下のURLにアクセスします：
 
-# ダッシュボード確認手順：
-# 1. メニュー → Dashboards
-# 2. 「Node Exporter full」を開く
-# 3. 以下のパネルに数値が表示されていることを確認：
-#    - CPU Busy（%）
+```
+http://localhost:3000
 ```
 
+初期ログイン情報：
+- Username: `admin`
+- Password: `admin`（初回ログイン時に変更を促される）
+
+ダッシュボード確認手順：
+1. メニュー → **Dashboards**
+2. 「**Node Exporter for Prometheus**」を開く
+3. 以下のパネルに数値が表示されていることを確認：
+   - CPU Busy（%）
+
 <figure>
-  <img src="images/12.png">
-  <figcaption align="center">Grafanaの表示画面例</figcaption>
+  <img src="images/12.png" alt="Grafanaダッシュボード">
+  <div style="text-align: center;">
+    <figcaption>Grafanaの表示画面例</figcaption>
+  </div>
 </figure>
 
-Absolute time rangeの項目をサービスを起動してからの時間に合わせて変更してください。
+Absolute time rangeの項目をサービス起動からの時間に合わせて変更してください。
+
 <figure>
-  <img align="center" src="images/13.png">
-  <figcaption align="center">表示する時間の範囲を変更</figcaption>
+  <img src="images/13.png" alt="時間範囲設定">
+  <div style="text-align: center;">
+    <figcaption>表示する時間の範囲を変更</figcaption>
+  </div>
 </figure>
 
 ## 7. トラブルシューティング
