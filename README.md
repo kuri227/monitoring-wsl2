@@ -9,7 +9,8 @@
 6. [構築手順](#6-構築手順)
 7. [動作確認と検証](#7-動作確認と検証)
 8. [トラブルシューティング](#8-トラブルシューティング)
-9. [参考資料](#9-参考資料)
+9. [セキュリティ考慮](#9-セキュリティ考慮)
+10. [参考資料](#10-参考資料)
 
 ## 1. はじめに
 本手順書は、Windows Subsystem for Linux(WSL2)環境に Docker Compose を用いて Prometheus、Node Exporter、Grafana をコンテナ化して展開し、**ホストOS（WSL2環境）のリソース監視ダッシュボード**を構築するための手順書です。
@@ -261,7 +262,9 @@ docker run hello-world
   </div>
 </figure>
 
-### 5-3. 設定ファイルの準備と所有権設定（所要時間：約5分）
+## 6. 構築手順
+
+### 6-1. 設定ファイルの準備と所有権設定（所要時間：約5分）
 
 ```bash
 # ディレクトリ構造を確認
@@ -350,7 +353,7 @@ ls -la ~/monitoring/
 # -rw-r--r-- 1 test docker  222 Dec 11 00:56 prometheus.yml
 ```
 
-### 5-4. サービスの起動（所要時間：約2分）
+### 6-2. サービスの起動（所要時間：約2分）
 
 systemctlコマンドを利用して、dockerを起動します。
 statusを確認し、serviceがenable、Activeがactive(running)になっていれば設定はOKです。
@@ -412,7 +415,7 @@ docker-compose up -d
 </figure>
 
 
-### 5-5. Grafanaの初期設定（所要時間：約5分）
+### 6-3. Grafanaの初期設定（所要時間：約5分）
 
 Grafana（http://localhost:3000）にアクセスし、ユーザーネームとパスワードのどちらも`admin`と入力します。
 新しいパスワードの設定を求められるので、入力してください。
@@ -445,7 +448,7 @@ Grafana（http://localhost:3000）にアクセスし、ユーザーネームと�
 
 これで軽量監視の環境の構築は完了です。
 
-## 6. 動作確認と検証
+## 7. 動作確認と検証
 
 ### 6-1. 全サービスの起動確認
 
@@ -517,7 +520,7 @@ Absolute time rangeの項目をサービス起動からの時間に合わせて�
   </div>
 </figure>
 
-## 7. トラブルシューティング
+## 8. トラブルシューティング
 
 ### Q1: `docker ps` でコンテナが表示されない、または Status が Exited
 
@@ -561,14 +564,14 @@ docker logs node-exporter
 #    「Last hour」など、適切な範囲が選択されているか
 ```
 
-## 8. セキュリティ考慮
+## 9. セキュリティ考慮
 
 ### 8-1. Grafana デフォルトパスワードの変更
 
 初回ログイン時に必ずパスワードを変更してください。
 
 
-## 9. 参考資料
+## 10. 参考資料
 
 - **Prometheus 公式ドキュメント**：https://prometheus.io/docs/introduction/overview/
 - **Grafana 公式ドキュメント**：https://grafana.com/docs/grafana/latest/
