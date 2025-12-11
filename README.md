@@ -370,7 +370,8 @@ docker-compose up -d
 
 ### 6-3. Grafanaの初期設定（所要時間：約5分）
 
-Grafana（http://localhost:3000）にアクセスし、ユーザーネームとパスワードのどちらも`admin`と入力します。
+Grafana（http://localhost:3000）
+にアクセスし、ユーザーネームとパスワードのどちらも`admin`と入力します。
 新しいパスワードの設定を求められるので、入力してください。
 
 <figure>
@@ -382,7 +383,8 @@ Grafana（http://localhost:3000）にアクセスし、ユーザーネームと�
 
 左側のメニューから **Connections** をクリックし、**Add new connection** をクリックします。
 検索欄に `prometheus` と入力して、出現した項目をクリックします。
-右上の **Add new data source** をクリックして、URL入力欄に `http://prometheus:9090` を入力します。
+右上の **Add new data source** をクリックします。
+遷移した画面で、下にスクロールし、Connectionという設定項目で、URLの入力欄に `http://prometheus:9090` を入力します。
 
 <figure>
   <img src="images/11.png" alt="Prometheus接続設定">
@@ -453,7 +455,7 @@ http://localhost:3000
 
 ダッシュボード確認手順：
 1. メニュー → **Dashboards**
-2. 「**Node Exporter for Prometheus**」を開く
+2. 「**Node Exporter for Full**」を開く
 3. 以下のパネルに数値が表示されていることを確認：
    - CPU Busy（%）
 
@@ -464,7 +466,7 @@ http://localhost:3000
   </div>
 </figure>
 
-Absolute time rangeの項目をサービス起動からの時間に合わせて変更してください。
+もし、`Nodata`になっている場合は、`Absolute time range`の項目を`Last 5 minites`に変更してみてください。
 
 <figure>
   <img src="images/13.png" alt="時間範囲設定">
